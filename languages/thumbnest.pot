@@ -1,0 +1,222 @@
+# Copyright (C) 2026 Usman Tayyab
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: ThumbNest – Smart Fallback Featured Images 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/thumbnest\n"
+"Last-Translator: Usman Tayyab <https://www.linkedin.com/in/imuxmantayyab/>\n"
+"Language-Team: English <en@example.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-09-10T10:30:00+00:00\n"
+"PO-Revision-Date: 2026-09-10T10:30:00+00:00\n"
+"X-Generator: ThumbNest POT Generator\n"
+"X-Domain: thumbnest\n"
+
+#: thumbnest.php:12
+msgid "ThumbNest – Smart Fallback Featured Images"
+msgstr ""
+
+#: thumbnest.php:14
+msgid "Intelligently provides lightweight, virtual fallback featured images across posts, pages, and custom post types without database bloat. Includes optional non-destructive bulk assignment."
+msgstr ""
+
+#: admin/class-admin.php:33
+msgid "ThumbNest Settings"
+msgstr ""
+
+#: admin/class-admin.php:34
+msgid "ThumbNest"
+msgstr ""
+
+#: admin/class-admin.php:85
+msgid "Select Fallback Image"
+msgstr ""
+
+#: admin/class-admin.php:86
+msgid "Use this image"
+msgstr ""
+
+#: admin/class-admin.php:87
+msgid "Are you sure you want to reset all ThumbNest settings to their defaults? This action cannot be undone."
+msgstr ""
+
+#: admin/class-admin.php:88
+msgid "Processing..."
+msgstr ""
+
+#: admin/class-admin.php:89
+msgid "Batch completed successfully!"
+msgstr ""
+
+#: admin/class-admin.php:90
+msgid "An error occurred during processing."
+msgstr ""
+
+#: admin/class-admin.php:91
+msgid "Are you sure you want to remove all plugin-assigned fallback images? Manually assigned featured images will NOT be affected."
+msgstr ""
+
+#: admin/class-admin.php:105
+msgid "Settings"
+msgstr ""
+
+#: admin/class-admin.php:117
+#: includes/class-bulk-processor.php:140
+#: includes/class-bulk-processor.php:157
+#: includes/class-bulk-processor.php:222
+msgid "Permission denied."
+msgstr ""
+
+#: admin/class-admin.php:122
+msgid "Settings have been reset to defaults."
+msgstr ""
+
+#: admin/views/settings-page.php:12
+msgid "General & Post Types"
+msgstr ""
+
+#: admin/views/settings-page.php:16
+msgid "Batch Assigner & Rollback"
+msgstr ""
+
+#: admin/views/settings-page.php:20
+msgid "Status & Diagnostics"
+msgstr ""
+
+#: admin/views/settings-page.php:32
+msgid "Smart Fallback Featured Images without database bloat."
+msgstr ""
+
+#: admin/views/settings-page.php:36
+msgid "Developed by Usman Tayyab"
+msgstr ""
+
+#: admin/views/tab-general.php:23
+msgid "Global Fallback Image"
+msgstr ""
+
+#: admin/views/tab-general.php:25
+msgid "This universal fallback image will automatically be displayed for any post type set to \"Use Global Image\" when a post does not have a real featured image."
+msgstr ""
+
+#: admin/views/tab-general.php:37
+msgid "No Global Image Selected"
+msgstr ""
+
+#: admin/views/tab-general.php:45
+msgid "Replace Image"
+msgstr ""
+
+#: admin/views/tab-general.php:45
+msgid "Select from Media Library"
+msgstr ""
+
+#: admin/views/tab-general.php:49
+msgid "Remove Image"
+msgstr ""
+
+#: admin/views/tab-general.php:60
+msgid "Fallback Engine Mode"
+msgstr ""
+
+#: admin/views/tab-general.php:62
+msgid "Choose how ThumbNest delivers fallback featured images."
+msgstr ""
+
+#: admin/views/tab-general.php:70
+msgid "Virtual Fallback — (Recommended)"
+msgstr ""
+
+#: admin/views/tab-general.php:71
+msgid "Injects the fallback image dynamically via WordPress thumbnail filters at runtime. 100% database-free, zero attachment duplication, and lightning fast."
+msgstr ""
+
+#: admin/views/tab-general.php:77
+msgid "Physical Assignment Mode"
+msgstr ""
+
+#: admin/views/tab-general.php:78
+msgid "Allows you to use the Batch Assigner (under the \"Batch Assigner\" tab) to stamp fallback IDs into postmeta for legacy themes or external feed services requiring direct database IDs."
+msgstr ""
+
+#: admin/views/tab-general.php:89
+msgid "Post Type Fallback Configuration"
+msgstr ""
+
+#: admin/views/tab-general.php:91
+msgid "Configure fallback rules independently for each public post type registered on your website."
+msgstr ""
+
+#: admin/views/tab-general.php:97
+msgid "No eligible public post types supporting featured images were found."
+msgstr ""
+
+#: admin/views/tab-general.php:114
+msgid "Enable Fallback"
+msgstr ""
+
+#: admin/views/tab-general.php:120
+msgid "Image Source:"
+msgstr ""
+
+#: admin/views/tab-general.php:122
+msgid "Use Global Image"
+msgstr ""
+
+#: admin/views/tab-general.php:123
+msgid "Use Custom Post-Type Image"
+msgstr ""
+
+#: admin/views/tab-general.php:124
+msgid "No Fallback (Disabled)"
+msgstr ""
+
+#: admin/views/tab-general.php:140
+msgid "Replace"
+msgstr ""
+
+#: admin/views/tab-general.php:140
+msgid "Select Image"
+msgstr ""
+
+#: admin/views/tab-general.php:143
+msgid "Remove"
+msgstr ""
+
+#: admin/views/tab-general.php:159
+msgid "Integrations & Ecosystem Compatibility"
+msgstr ""
+
+#: admin/views/tab-general.php:161
+msgid "Seamlessly integrate ThumbNest with modern page builders and ecosystem endpoints."
+msgstr ""
+
+#: admin/views/tab-general.php:169
+msgid "REST API & Gutenberg Support"
+msgstr ""
+
+#: admin/views/tab-general.php:170
+msgid "Expose fallback image fields in the WordPress REST API for decoupled frontends and block templates."
+msgstr ""
+
+#: admin/views/tab-general.php:174
+msgid "Elementor Dynamic Widgets"
+msgstr ""
+
+#: admin/views/tab-general.php:175
+msgid "Ensure Elementor post grids, loop builders, and archive templates render fallback images accurately."
+msgstr ""
+
+#: admin/views/tab-general.php:179
+msgid "WooCommerce Compatibility"
+msgstr ""
+
+#: admin/views/tab-general.php:180
+msgid "Allow WooCommerce product catalog items without images to use the configured product fallback."
+msgstr ""
+
+#: admin/views/tab-general.php:187
+msgid "Save Changes"
+msgstr ""
