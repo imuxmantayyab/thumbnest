@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThumbNest Documentation – Smart Fallback Featured Images</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #eff6ff;
+            --primary-glow: rgba(37, 99, 235, 0.15);
+            --accent: #06b6d4;
+            --accent-green: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
+            --bg-body: #0b0f19;
+            --bg-surface: #111827;
+            --bg-surface-elevated: #1f2937;
+            --bg-code: #0f172a;
+            --border: #1f2937;
+            --border-light: #374151;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --text-heading: #ffffff;
+            --sidebar-width: 280px;
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-heading: 'Outfit', sans-serif;
+            --font-code: 'Fira Code', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.65;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--bg-surface);
+            border-right: 1px solid var(--border);
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .sidebar-brand {
+            padding: 24px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 18px;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .brand-title {
+            font-family: var(--font-heading);
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-heading);
+            letter-spacing: -0.5px;
+        }
+
+        .brand-badge {
+            font-size: 10px;
+            text-transform: uppercase;
+            background: var(--border-light);
+            color: var(--accent);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+            margin-left: auto;
+        }
+
+        .sidebar-nav {
+            padding: 20px 12px;
+            flex-grow: 1;
+        }
+
+        .nav-group-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            font-weight: 700;
+            padding: 12px 12px 6px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--text-heading);
+            background-color: var(--bg-surface-elevated);
+        }
+
+        .nav-link.active {
+            color: #ffffff;
+            background-color: var(--primary);
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+
+        .sidebar-footer {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .sidebar-footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* Main Content Container */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            padding: 40px 60px;
+            max-width: 1050px;
+        }
+
+        /* Header Hero */
+        .hero {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(6, 182, 212, 0.05));
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero h1 {
+            font-family: var(--font-heading);
+            font-size: 34px;
+            font-weight: 800;
+            color: var(--text-heading);
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-lead {
+            font-size: 17px;
+            color: var(--text-muted);
+            max-width: 750px;
+            margin-bottom: 24px;
+        }
+
+        .badge-list {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            background: var(--bg-surface-elevated);
+            border: 1px solid var(--border-light);
+            color: var(--text-main);
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent-green);
+            border-color: rgba(16, 185, 129, 0.2);
+        }
+
+        .badge-primary {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--accent);
+            border-color: rgba(37, 99, 235, 0.2);
+        }
+
+        /* Typography & Headings */
+        h2 {
+            font-family: var(--font-heading);
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-heading);
+            margin: 40px 0 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-heading);
+            margin: 24px 0 10px;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: #d1d5db;
+        }
+
+        /* Cards & Grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 24px 0;
+        }
+
+        .card {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+        }
+
+        .card-icon {
+            font-size: 24px;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .card h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-heading);
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 0;
+        }
+
+        /* Callout Alerts */
+        .callout {
+            padding: 20px;
+            border-radius: var(--radius-md);
+            margin: 20px 0;
+            border-left: 4px solid;
+            background-color: var(--bg-surface);
+        }
+
+        .callout-info {
+            border-color: var(--primary);
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+
+        .callout-success {
+            border-color: var(--accent-green);
+            background-color: rgba(16, 185, 129, 0.05);
+        }
+
+        .callout-warning {
+            border-color: var(--accent-amber);
+            background-color: rgba(245, 158, 11, 0.05);
+        }
+
+        .callout-title {
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 4px;
+            color: var(--text-heading);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Code Blocks */
+        pre {
+            background-color: var(--bg-code);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            overflow-x: auto;
+            margin: 16px 0 24px;
+            font-family: var(--font-code);
+            font-size: 13.5px;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+
+        code {
+            font-family: var(--font-code);
+            font-size: 13px;
+            background-color: rgba(255, 255, 255, 0.08);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--accent);
+        }
+
+        /* Steps */
+        .step-list {
+            counter-reset: step-counter;
+            list-style: none;
+            margin: 24px 0;
+        }
+
+        .step-item {
+            position: relative;
+            padding-left: 48px;
+            margin-bottom: 24px;
+        }
+
+        .step-item::before {
+            counter-increment: step-counter;
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 32px;
+            height: 32px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        .step-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-heading);
+            margin-bottom: 6px;
+        }
+
+        /* Priority Diagram Visual */
+        .flow-diagram {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        .flow-step {
+            background: var(--bg-surface-elevated);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            padding: 14px 20px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .flow-step.step-1 { border-left: 4px solid var(--accent-green); }
+        .flow-step.step-2 { border-left: 4px solid var(--primary); }
+        .flow-step.step-3 { border-left: 4px solid var(--accent); }
+        .flow-step.step-4 { border-left: 4px solid var(--accent-amber); }
+
+        .flow-step-name {
+            font-weight: 600;
+            color: var(--text-heading);
+            font-size: 14px;
+        }
+
+        .flow-step-tag {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: var(--bg-surface);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        th, td {
+            padding: 12px 18px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: var(--bg-surface-elevated);
+            color: var(--text-heading);
+            font-weight: 600;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            border-bottom: 1px solid var(--border);
+            color: #d1d5db;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                display: none;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 24px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon">T</div>
+            <div class="brand-title">ThumbNest</div>
+            <span class="brand-badge">v1.0.0</span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-group-title">Getting Started</div>
+            <a href="#quick-start" class="nav-link active">⚡ Quick Start</a>
+            <a href="#architecture" class="nav-link">🏗️ How It Works</a>
+            <a href="#priority" class="nav-link">🎯 Priority Hierarchy</a>
+
+            <div class="nav-group-title">Configuration</div>
+            <a href="#global-settings" class="nav-link">🌐 Global Fallback</a>
+            <a href="#post-types" class="nav-link">📝 Post Type Matrix</a>
+            <a href="#batch-processor" class="nav-link">🔄 Batch & Rollback</a>
+
+            <div class="nav-group-title">Compatibility</div>
+            <a href="#page-builders" class="nav-link">🧩 Elementor & Blocks</a>
+            <a href="#woocommerce" class="nav-link">🛍️ WooCommerce</a>
+
+            <div class="nav-group-title">Developers</div>
+            <a href="#template-tags" class="nav-link">💻 Template Tags</a>
+            <a href="#hooks" class="nav-link">🪝 Action & Filters</a>
+            <a href="#faq" class="nav-link">❓ FAQ & Troubleshooting</a>
+        </nav>
+
+        <div class="sidebar-footer">
+            Developed by <a href="https://www.linkedin.com/in/imuxmantayyab/" target="_blank" rel="noopener noreferrer">Usman Tayyab</a><br>
+            <a href="https://github.com/imuxmantayyab/thumbnest" target="_blank" rel="noopener noreferrer" style="font-size: 0.8rem; color: #94a3b8; text-decoration: none;">GitHub Repository &rarr;</a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- Hero Section -->
+        <header class="hero">
+            <h1>ThumbNest Documentation</h1>
+            <p class="hero-lead">
+                Enterprise-grade fallback featured images for WordPress. Virtual zero-database overhead, dynamic post-type discovery, and non-destructive batch assignment tools.
+            </p>
+            <div class="badge-list">
+                <span class="badge badge-success">✓ WordPress 6.7+ Ready</span>
+                <span class="badge badge-primary">⚡ PHP 7.4 – 8.3+</span>
+                <span class="badge">🛡️ 100% Non-Destructive</span>
+                <span class="badge">🚀 Zero Database Bloat</span>
+            </div>
+        </header>
+
+        <!-- 1. Quick Start -->
+        <section id="quick-start">
+            <h2>⚡ Quick Start Guide</h2>
+            <p>Get ThumbNest up and running across your entire website in under two minutes:</p>
+
+            <ol class="step-list">
+                <li class="step-item">
+                    <div class="step-title">Install the Plugin</div>
+                    <p>Go to <strong>Plugins &gt; Add New &gt; Upload Plugin</strong> in WordPress, upload <code>thumbnest.zip</code>, and activate the plugin.</p>
+                </li>
+                <li class="step-item">
+                    <div class="step-title">Select Global Fallback Image</div>
+                    <p>Navigate to <strong>Settings &gt; ThumbNest</strong>. Under <em>Global Fallback Image</em>, click <strong>Select from Media Library</strong> and choose your brand's default placeholder image.</p>
+                </li>
+                <li class="step-item">
+                    <div class="step-title">Save and Enjoy</div>
+                    <p>Click <strong>Save Changes</strong>. All existing and future posts without a featured image will immediately display the fallback.</p>
+                </li>
+            </ol>
+        </section>
+
+        <!-- 2. How It Works -->
+        <section id="architecture">
+            <h2>🏗️ How It Works</h2>
+            
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-icon">⚡</div>
+                    <h4>Virtual Fallback (Default)</h4>
+                    <p>Dynamically injects fallback images at runtime via WordPress thumbnail filters. Zero database writes, zero duplicate media attachments.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🛡️</div>
+                    <h4>Real Image Priority</h4>
+                    <p>ThumbNest strictly respects genuine featured images. Manually assigned post images are never replaced or modified.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔄</div>
+                    <h4>Safe Batch Assigner</h4>
+                    <p>Need physical database IDs for legacy feed tools? Use the paginated batch assigner with built-in one-click rollback protection.</p>
+                </div>
+            </div>
+
+            <div class="callout callout-info">
+                <div class="callout-title">💡 Why Virtual Fallback is Better for Performance</div>
+                <p>On a website with 50,000 posts, traditional plugins duplicate 50,000 rows in <code>wp_postmeta</code>. ThumbNest stores only 1 configuration setting and resolves the fallback in memory in <code>0.0001s</code>.</p>
+            </div>
+        </section>
+
+        <!-- 3. Priority Hierarchy -->
+        <section id="priority">
+            <h2>🎯 Priority Resolution Hierarchy</h2>
+            <p>Whenever a thumbnail is requested by a theme or widget, ThumbNest resolves the image in this deterministic order:</p>
+
+            <div class="flow-diagram">
+                <div class="flow-step step-1">
+                    <span class="flow-step-name">1. Post has manually assigned Featured Image</span>
+                    <span class="flow-step-tag">Returns Real Image</span>
+                </div>
+                <div class="flow-step step-2">
+                    <span class="flow-step-name">2. Post Type has Custom Fallback Image configured</span>
+                    <span class="flow-step-tag">Returns Custom Image</span>
+                </div>
+                <div class="flow-step step-3">
+                    <span class="flow-step-name">3. Post Type is configured to "Use Global Image"</span>
+                    <span class="flow-step-tag">Returns Global Image</span>
+                </div>
+                <div class="flow-step step-4">
+                    <span class="flow-step-name">4. Post Type fallback is Disabled or No Image Set</span>
+                    <span class="flow-step-tag">Returns Empty</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Global Settings & Post Types -->
+        <section id="global-settings">
+            <h2>🌐 Configuration Guide</h2>
+            <p>From the <strong>Settings &gt; ThumbNest</strong> menu, customize universal and per-post-type behavior:</p>
+
+            <h3>Global Fallback Image</h3>
+            <p>Upload a versatile, high-resolution default image (recommended: <code>1200x630px</code>). It serves as the universal baseline for any post type set to <em>Global</em>.</p>
+        </section>
+
+        <section id="post-types">
+            <h3>📝 Post Type Configuration Matrix</h3>
+            <p>ThumbNest dynamically discovers all registered public post types supporting featured images. For each post type, you can choose:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Option</th>
+                        <th>Behavior</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Use Global Image</strong></td>
+                        <td>Inherits the universal fallback image configured at the top.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Use Custom Post-Type Image</strong></td>
+                        <td>Allows you to choose an independent fallback (e.g. specialized graphic for News or Pages).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>No Fallback (Disabled)</strong></td>
+                        <td>Disables fallback logic completely for this post type.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 5. Batch Assigner -->
+        <section id="batch-processor">
+            <h2>🔄 Batch Assigner & Safe Rollback Tool</h2>
+            <p>Under the <strong>Batch Assigner &amp; Rollback</strong> tab, you can perform asynchronous operations:</p>
+
+            <div class="callout callout-warning">
+                <div class="callout-title">🛡️ Safety &amp; Rollback Guarantee</div>
+                <p>When physical assignment is run, ThumbNest marks each post with <code>_thumbnest_is_fallback = 1</code>. When clicking <strong>Remove Plugin-Assigned Fallbacks</strong>, only plugin-assigned images are removed. Real user uploads are <strong>never touched</strong>.</p>
+            </div>
+        </section>
+
+        <!-- 6. Compatibility -->
+        <section id="page-builders">
+            <h2>🧩 Page Builder & Theme Compatibility</h2>
+
+            <h3>Elementor</h3>
+            <p>ThumbNest hooks directly into Elementor's image rendering pipelines. Posts widgets, loop builders, archive cards, and portfolio widgets display fallback thumbnails automatically.</p>
+
+            <h3>Gutenberg (Block Editor) & Classic Editor</h3>
+            <p>On post editing screens (<code>post.php</code>), ThumbNest ensures the Featured Image sidebar box remains empty if no real image is assigned, preventing author confusion.</p>
+        </section>
+
+        <section id="woocommerce">
+            <h3>🛍️ WooCommerce Compatibility</h3>
+            <p>When WooCommerce support is enabled, catalog products without images will display the configured product fallback image without altering your product image galleries.</p>
+        </section>
+
+        <!-- 7. Developer API -->
+        <section id="template-tags">
+            <h2>💻 Developer Reference & Template Tags</h2>
+            <p>Use these native PHP template tags anywhere in your theme templates:</p>
+
+            <pre><code>// 1. Get fallback attachment ID for a post
+$image_id = thumbnest_get_fallback_image_id( $post_id );
+
+// 2. Check if a post has an active fallback
+if ( thumbnest_has_fallback( $post_id ) ) {
+    // Has fallback
+}
+
+// 3. Render fallback image HTML markup
+thumbnest_the_fallback_image( $post_id, 'medium', array( 'class' => 'my-thumbnail' ) );</code></pre>
+        </section>
+
+        <section id="hooks">
+            <h2>🪝 Action &amp; Filter Hooks</h2>
+
+            <h3>Filter: <code>thumbnest_fallback_image_id</code></h3>
+            <p>Conditionally change fallback images on the fly (e.g. by post category, tag, or author):</p>
+            <pre><code>add_filter( 'thumbnest_fallback_image_id', function( $fallback_id, $post_id, $post_type ) {
+    if ( 'post' === $post_type && has_category( 'interviews', $post_id ) ) {
+        return 789; // Attachment ID for Interview category
+    }
+    return $fallback_id;
+}, 10, 3 );</code></pre>
+        </section>
+
+        <!-- 8. FAQ -->
+        <section id="faq">
+            <h2>❓ Frequently Asked Questions</h2>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h4>Will it overwrite my existing thumbnails?</h4>
+                    <p>No. ThumbNest checks for existing manual thumbnails first. If an image exists, ThumbNest does nothing.</p>
+                </div>
+                <div class="card">
+                    <h4>What happens when an author adds an image?</h4>
+                    <p>The new real featured image immediately takes precedence on the frontend with zero sync required.</p>
+                </div>
+                <div class="card">
+                    <h4>Is it compatible with Multisite?</h4>
+                    <p>Yes. Each subsite maintains its own independent fallback settings and image selections.</p>
+                </div>
+                <div class="card">
+                    <h4>What happens on uninstall?</h4>
+                    <p>ThumbNest cleans up all options and transients from the database without deleting your Media Library uploads.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Smooth scroll active state highlighting
+        document.addEventListener('DOMContentLoaded', () => {
+            const links = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                links.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
